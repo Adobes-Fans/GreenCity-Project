@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>绿城建筑 后台管理</title>
+
+    <!-- Bootstrap -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        #container {
+            width: 100.8%;
+            height: 100vh;
+        }
+        
+        #main {
+            height: 100%;
+            background-color: rgba(240, 242, 247, 1);
+            padding: 0;
+        }
+        
+        #list {
+            background-color: #ffffff;
+            margin: 5% 5%;
+            padding: 3%;
+            height: 77%;
+        }
+        
+        .table>tbody>tr>td,
+        .table>tbody>tr>th,
+        .table>tfoot>tr>td,
+        .table>tfoot>tr>th,
+        .table>thead>tr>td,
+        .table>thead>tr>th {
+            text-align: center;
+            vertical-align: middle;
+            padding: 10px;
+        }
+        
+        td button {
+            margin-right: 6px;
+        }
+        
+        #page {
+            width: 100%;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid" style="padding: 0">
+        <div class="row" id="container">
+            <!-- 这一块为系统原有导航栏 -->
+            <div class="col-md-2" style="background-color: #000000; height: 100%; margin-right: 0.0016%"></div>
+
+            <div class="col-md-10" id="main">
+                <nav class="navbar navbar-default">
+                    <div class="container-fluid">
+                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                            <span style="line-height: 50px; font-size: 22px; font-family: 'Times New Roman', Times, serif">建筑单体信息列表</span>
+
+                            <form class="navbar-form navbar-right">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Search">
+                                </div>
+                                <button type="submit" class="btn btn-default">搜索</button>
+                            </form>
+
+                            <ul class="nav navbar-nav navbar-right">
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">添加<span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#">新项目</a></li>
+                                        <li><a href="#">地上建筑</a></li>
+                                        <li><a href="#">地下室</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+
+                <div id="list">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>单体名称</th>
+                                <th>项目名称</th>
+                                <th>地区</th>
+                                <th>所在城市</th>
+                                <th>结构主材用量</th>
+                                <th>抗震烈度</th>
+                                <th>结构类型</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td><button class="btn btn-info">查看</button> <button class="btn btn-success">更新</button> <button class="btn btn-warning">删除</button></td>
+                            </tr>
+                            <tr>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td><button class="btn btn-info">查看</button> <button class="btn btn-success">更新</button> <button class="btn btn-warning">删除</button></td>
+                            </tr>
+                            <tr>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td><button class="btn btn-info">查看</button> <button class="btn btn-success">更新</button> <button class="btn btn-warning">删除</button></td>
+                            </tr>
+                            <tr>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td><button class="btn btn-info">查看</button> <button class="btn btn-success">更新</button> <button class="btn btn-warning">删除</button></td>
+                            </tr>
+                            <tr>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td><button class="btn btn-info">查看</button> <button class="btn btn-success">更新</button> <button class="btn btn-warning">删除</button></td>
+                            </tr>
+                            <tr>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td><button class="btn btn-info">查看</button> <button class="btn btn-success">更新</button> <button class="btn btn-warning">删除</button></td>
+                            </tr>
+                            <tr>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td><button class="btn btn-info">查看</button> <button class="btn btn-success">更新</button> <button class="btn btn-warning">删除</button></td>
+                            </tr>
+                            <tr>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td><button class="btn btn-info">查看</button> <button class="btn btn-success">更新</button> <button class="btn btn-warning">删除</button></td>
+                            </tr>
+                            <tr>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td><button class="btn btn-info">查看</button> <button class="btn btn-success">更新</button> <button class="btn btn-warning">删除</button></td>
+                            </tr>
+                            <tr>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td>Column content</td>
+                                <td><button class="btn btn-info">查看</button> <button class="btn btn-success">更新</button> <button class="btn btn-warning">删除</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div id="page">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination pagination-lg">
+                                <li>
+                                    <a href="#" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <li><a href="#">1</a></li>
+                                <li><a href="#">2</a></li>
+                                <li><a href="#">3</a></li>
+                                <li><a href="#">4</a></li>
+                                <li><a href="#">5</a></li>
+                                <li>
+                                    <a href="#" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/jquery-3.1.1.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+</body>
+
+</html>
