@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>绿城建筑 后台管理</title>
+    <title>绿城建筑 项目信息</title>
 
     <!-- Bootstrap -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
@@ -32,6 +32,11 @@
         form {
             margin-top: 2.5%;
         }
+        
+        .mustType {
+            color: #ff0000;
+            vertical-align: middle;
+        }
     </style>
 </head>
 
@@ -47,7 +52,7 @@
                 </div>
                 <form class="form-horizontal">
                     <div class="form-group form-group-lg">
-                        <label for="inputEmail3" class="col-md-3 control-label">项目名称：</label>
+                        <label for="inputEmail3" class="col-md-3 control-label"><span class="mustType">* </span>项目名称：</label>
                         <div class="col-md-9">
                             <input type="text" class="form-control" placeholder="Project Name" required>
                         </div>
@@ -55,7 +60,7 @@
                     <div class="form-group form-group-lg">
                         <label for="inputEmail3" class="col-md-3 control-label">对应子项：</label>
                         <div class="col-md-9">
-                            <select class="form-control"> 
+                            <select class="form-control" disabled> 
                                 <option>暂无</option>
                                 <option>项目1</option>
                                 <option>项目2</option>
@@ -67,9 +72,9 @@
                         </div>
                     </div>
                     <div class="form-group form-group-lg">
-                        <label for="inputEmail3" class="col-md-3 control-label">建筑类型：</label>
+                        <label for="inputEmail3" class="col-md-3 control-label"><span class="mustType">* </span>建筑类型：</label>
                         <div class="col-md-9">
-                            <select class="form-control" id="buildingType1" multiple>
+                            <select class="form-control" id="buildingType1" multiple required>
                                 <option>住宅</option>
                                 <option>办公楼</option>
                                 <option>商业</option>
@@ -94,13 +99,13 @@
                     <div class="form-group form-group-lg">
                         <label for="inputEmail3" class="col-md-3 control-label">所在城市：</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control" placeholder="Location" required>
+                            <input type="text" class="form-control" placeholder="Location">
                         </div>
                     </div>
                     <div class="form-group form-group-lg">
-                        <label for="inputEmail3" class="col-md-3 control-label">抗震烈度：</label>
+                        <label for="inputEmail3" class="col-md-3 control-label"><span class="mustType">* </span>抗震烈度：</label>
                         <div class="col-md-9">
-                            <select class="form-control" multiple> 
+                            <select class="form-control" multiple required> 
                                 <option>非抗震</option>
                                 <option>6度</option>
                                 <option>7度</option>
@@ -114,19 +119,19 @@
                     <div class="form-group form-group-lg">
                         <label for="inputEmail3" class="col-md-3 control-label">开发商：</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control" placeholder="Developer" required>
+                            <input type="text" class="form-control" placeholder="Developer">
                         </div>
                     </div>
                     <div class="form-group form-group-lg">
                         <label for="inputEmail3" class="col-md-3 control-label">基本风压：</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control" placeholder="Wind Presssure" required>
+                            <input type="text" class="form-control" placeholder="Wind Presssure">
                         </div>
                     </div>
                     <div class="form-group form-group-lg">
                         <label for="inputEmail3" class="col-md-3 control-label">基本雪压：</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control" placeholder="Snow Presssure" required>
+                            <input type="text" class="form-control" placeholder="Snow Presssure">
                         </div>
                     </div>
                     <div class="form-group form-group-lg">
