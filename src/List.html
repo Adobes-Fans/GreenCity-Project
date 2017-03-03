@@ -14,7 +14,12 @@
     <style>
         #container {
             width: 100.8%;
-            height: 100vh;
+        }
+        
+        #nav {
+            background-color: #000000;
+            height: 100%;
+            margin-right: 0.0016%
         }
         
         #main {
@@ -56,7 +61,7 @@
     <div class="container-fluid" style="padding: 0">
         <div class="row" id="container">
             <!-- 这一块为系统原有导航栏 -->
-            <div class="col-md-2" style="background-color: #000000; height: 100%; margin-right: 0.0016%"></div>
+            <div class="col-md-2" id="nav"></div>
 
             <div class="col-md-10" id="main">
                 <nav class="navbar navbar-default">
@@ -230,6 +235,18 @@
 
     <script src="../js/jquery-3.1.1.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
+    <script>
+        function setNavHeight() {
+            var h = $('#main').height();
+            var padH = 0;
+            var navH = Number(h.toString().substring(0, 5)) + Number(padH.toString().substring(0, 3));
+            $('#nav').css('height', navH + "px");
+        }
+
+        window.onload = function() {
+            setNavHeight();
+        }
+    </script>
 </body>
 
 </html>
