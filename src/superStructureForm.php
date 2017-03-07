@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 
+<?php
+    $conn = mysqli_connect("localhost","root","123456","GreenCity","2711");
+    if (!$conn) {
+        die('Could not connect: ' . mysqli_error());
+    }
+    // mysqli_select_db("GreenCity", $con);
+?>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -107,10 +114,10 @@
                                 <div class="modal-body">
                                     <div class="row">
                                         <div class="col-md-offset-1 col-md-6">
-                                            <input type="text" class="form-control" placeholder="项目名称">
+                                            <input type="text" class="form-control" placeholder="项目名称" id="ProName">
                                         </div>
                                         <div class="col-md-3">
-                                            <button type="button" class="btn btn-info">查询</button>
+                                            <button type="button" class="btn btn-info" OnClick="ProNameQuery()">查询</button>
                                         </div>
                                     </div>
                                     <div class="row searchTable">
@@ -123,8 +130,22 @@
                                                     <td>选择项目</td>
                                                 </tr>
                                             </thead>
+
                                             <tbody>
-                                                <tr>
+                                                <?php
+                                                    $proRes = mysqli_query($conn,"SELECT projectName, buildingType, inputerID FROM Project");
+                                                    while($row = mysqli_fetch_array($proRes,MYSQLI_ASSOC)){
+                                                        echo "<tr name='proTable' class = 'proTableClass'>";
+                                                        echo "<td>".$row['projectName']."</td>";
+                                                        echo "<td>".$row['buildingType']."</td>";
+                                                        $inputerRes = mysqli_query($conn,"SELECT name FROM user where id = '".$row['inputerID']."'");
+                                                        $inputerName = mysqli_fetch_array($inputerRes,MYSQLI_ASSOC)['name'];
+                                                        echo "<td>".$inputerName."</td>";
+                                                        echo "<td><input type='radio' name='project'></td>";
+                                                        echo "</tr>";
+                                                    }
+                                                ?>
+                                                <!-- <tr>
                                                     <td>xxx</td>
                                                     <td>住宅</td>
                                                     <td>name</td>
@@ -207,7 +228,7 @@
                                                     <td>住宅</td>
                                                     <td>name</td>
                                                     <td><input type="radio" name="project"></td>
-                                                </tr>
+                                                </tr> -->
                                             </tbody>
                                         </table>
                                     </div>
@@ -443,6 +464,17 @@
             format: 'yyyy-mm-dd',
             todayBtn: 1,
         });
+        function ProNameQuery(){
+            $proNameQueryArg = document.getElementById('ProName').value;
+            $proTable = document.getElementsByName('proTable');
+            for (var i = $proTable.length - 1; i >= 0; i--) {
+                if ($proTable[i].childNodes[0].textContent == $proNameQueryArg) {
+                    $('.proTableClass').slice(i,i+1).css('display', '')
+                }else{
+                    $('.proTableClass').slice(i,i+1).css('display', 'none')
+                }
+            }
+        }
     </script>
 </body>
 
