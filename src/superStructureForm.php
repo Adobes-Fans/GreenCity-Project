@@ -1,12 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <?php
-    $conn = mysqli_connect("localhost","root","123456","GreenCity","2711");
-    if (!$conn) {
-        die('Could not connect: ' . mysqli_error());
-    }
-    // mysqli_select_db("GreenCity", $con);
+    $pdo = new PDO('mysql:host=localhost;dbname=GreenCity', "root", "123456", array(PDO::ATTR_PERSISTENT => true));
 ?>
 <head>
     <meta charset="utf-8">
@@ -99,8 +94,13 @@
                     </div>
                     <div class="form-group form-group-lg">
                         <label for="inputEmail3" class="col-md-3 control-label"><span class="mustType">* </span>对应项目：</label>
-                        <div class="col-md-4" style="margin-top:7px;" data-toggle="modal" data-target="#myModal">
+
+                        <div class="col-md-2" style="margin-top:7px;" data-toggle="modal" data-target="#myModal">
                             <button type="button" class="btn btn-info">选择项目</button>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label id="selectedPro" style="font-size: 17px; font-family: 微软雅黑; font-weight: normal; padding-top:10px"></label>
                         </div>
                     </div>
                     <!-- 模拟弹出窗口 -->
@@ -133,109 +133,23 @@
 
                                             <tbody>
                                                 <?php
-                                                    $proRes = mysqli_query($conn,"SELECT projectName, buildingType, inputerID FROM Project");
-                                                    while($row = mysqli_fetch_array($proRes,MYSQLI_ASSOC)){
+                                                    $proRes = $pdo->query("SELECT projectName, buildingType, inputerID, inputerName FROM Project");
+                                                    foreach ($proRes as $row) {
                                                         echo "<tr name='proTable' class = 'proTableClass'>";
                                                         echo "<td>".$row['projectName']."</td>";
                                                         echo "<td>".$row['buildingType']."</td>";
-                                                        $inputerRes = mysqli_query($conn,"SELECT name FROM user where id = '".$row['inputerID']."'");
-                                                        $inputerName = mysqli_fetch_array($inputerRes,MYSQLI_ASSOC)['name'];
-                                                        echo "<td>".$inputerName."</td>";
+                                                        echo "<td>".$row['inputerName']."</td>";
                                                         echo "<td><input type='radio' name='project'></td>";
                                                         echo "</tr>";
                                                     }
                                                 ?>
-                                                <!-- <tr>
-                                                    <td>xxx</td>
-                                                    <td>住宅</td>
-                                                    <td>name</td>
-                                                    <td><input type="radio" name="project"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>xxx</td>
-                                                    <td>住宅</td>
-                                                    <td>name</td>
-                                                    <td><input type="radio" name="project"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>xxx</td>
-                                                    <td>住宅</td>
-                                                    <td>name</td>
-                                                    <td><input type="radio" name="project"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>xxx</td>
-                                                    <td>住宅</td>
-                                                    <td>name</td>
-                                                    <td><input type="radio" name="project"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>xxx</td>
-                                                    <td>住宅</td>
-                                                    <td>name</td>
-                                                    <td><input type="radio" name="project"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>xxx</td>
-                                                    <td>住宅</td>
-                                                    <td>name</td>
-                                                    <td><input type="radio" name="project"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>xxx</td>
-                                                    <td>住宅</td>
-                                                    <td>name</td>
-                                                    <td><input type="radio" name="project"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>xxx</td>
-                                                    <td>住宅</td>
-                                                    <td>name</td>
-                                                    <td><input type="radio" name="project"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>xxx</td>
-                                                    <td>住宅</td>
-                                                    <td>name</td>
-                                                    <td><input type="radio" name="project"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>xxx</td>
-                                                    <td>住宅</td>
-                                                    <td>name</td>
-                                                    <td><input type="radio" name="project"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>xxx</td>
-                                                    <td>住宅</td>
-                                                    <td>name</td>
-                                                    <td><input type="radio" name="project"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>xxx</td>
-                                                    <td>住宅</td>
-                                                    <td>name</td>
-                                                    <td><input type="radio" name="project"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>xxx</td>
-                                                    <td>住宅</td>
-                                                    <td>name</td>
-                                                    <td><input type="radio" name="project"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>xxx</td>
-                                                    <td>住宅</td>
-                                                    <td>name</td>
-                                                    <td><input type="radio" name="project"></td>
-                                                </tr> -->
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                                    <button type="button" class="btn btn-primary">提交</button>
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal" OnClick="selectPro()">提交</button>
                                 </div>
                             </div>
                         </div>
@@ -469,10 +383,16 @@
             $proTable = document.getElementsByName('proTable');
             for (var i = $proTable.length - 1; i >= 0; i--) {
                 if ($proTable[i].childNodes[0].textContent == $proNameQueryArg) {
-                    $('.proTableClass').slice(i,i+1).css('display', '')
+                    $('.proTableClass').eq(i).css('display', '')
                 }else{
-                    $('.proTableClass').slice(i,i+1).css('display', 'none')
+                    $('.proTableClass').eq(i).css('display', 'none')
                 }
+            }
+        }
+        function selectPro(){
+            var selected = $('input:radio[name="project"]:checked');
+            if (selected.length != 0) {
+                document.getElementById('selectedPro').innerHTML = selected.parent().parent().children().eq(0).text();
             }
         }
     </script>
