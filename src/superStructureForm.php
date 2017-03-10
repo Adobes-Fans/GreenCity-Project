@@ -1,7 +1,16 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <?php
+    session_start();
     $pdo = new PDO('mysql:host=localhost;dbname=GreenCity', "root", "123456", array(PDO::ATTR_PERSISTENT => true));
+
+    // echo "test";
+    // if(isset($_SESSION["operation"])){
+    //     echo $_SESSION["operation"];
+    //     echo $_COOKIE["itemName"];
+    // }
+    // else
+    //     echo " sad";
 ?>
 <head>
     <meta charset="utf-8">
@@ -343,6 +352,29 @@
 
         window.onload = function() {
             setNavHeight();
+            allInput = $(".form-control");
+            // val()
+            <?php
+                if(isset($_SESSION["operation"]) && $_SESSION["operation"]!=0){
+                    $existRecord = $pdo->query("SELECT * FROM superStructure")->fetch();
+                    $(".form-control").eq(0).val($existRecord["name"]);
+                    $(".form-control").eq(1).val($existRecord[]);
+                    $(".form-control").eq(2).val($existRecord[]);
+                    $(".form-control").eq(3).val($existRecord[]);
+                    $(".form-control").eq(4).val($existRecord[]);
+                    $(".form-control").eq(5).val($existRecord[]);
+                    $(".form-control").eq(6).val($existRecord[]);
+                    $(".form-control").eq(7).val($existRecord[]);
+                    $(".form-control").eq(8).val($existRecord[]);
+                    $(".form-control").eq(9).val($existRecord[]);
+                    $(".form-control").eq(10).val($existRecord[]);
+                    $(".form-control").eq(11).val($existRecord[]);
+                    $(".form-control").eq(12).val($existRecord[]);
+                    if ($_SESSION["operation"]==1) {
+                        #view
+                    }
+                }
+            ?>            
         }
 
         $('#structureType1').change(function() {
@@ -379,13 +411,18 @@
             todayBtn: 1,
         });
         function ProNameQuery(){
-            $proNameQueryArg = document.getElementById('ProName').value;
-            $proTable = document.getElementsByName('proTable');
-            for (var i = $proTable.length - 1; i >= 0; i--) {
-                if ($proTable[i].childNodes[0].textContent == $proNameQueryArg) {
-                    $('.proTableClass').eq(i).css('display', '')
-                }else{
-                    $('.proTableClass').eq(i).css('display', 'none')
+            proNameQueryArg = document.getElementById('ProName').value;
+            if(proNameQueryArg.length==0){
+                $('.proTableClass').css('display', '')
+            }
+            if(proNameQueryArg.length!=0){
+                proTable = document.getElementsByName('proTable');
+                for (var i = proTable.length - 1; i >= 0; i--) {
+                    if (proTable[i].childNodes[0].textContent == proNameQueryArg) {
+                        $('.proTableClass').eq(i).css('display', '');
+                    }else{
+                        $('.proTableClass').eq(i).css('display', 'none');
+                    }
                 }
             }
         }

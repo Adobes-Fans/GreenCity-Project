@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <?php
+    session_start();
     $pdo = new PDO('mysql:host=localhost;dbname=GreenCity', "root", "123456", array(PDO::ATTR_PERSISTENT => true));
 ?>
 <head>
@@ -44,7 +45,7 @@
         .table>tfoot>tr>th,
         .table>thead>tr>td,
         .table>thead>tr>th {
-            min-width: 300px;
+            min-width: 100px;
             text-align: center;
             vertical-align: middle;
             padding: 10px;
@@ -88,30 +89,27 @@
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">添加<span class="caret"></span></a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="#">新项目</a></li>
-                                        <li><a href="#">地上建筑</a></li>
-                                        <li><a href="#">地下室</a></li>
+                                        <li><a style = 'cursor:pointer' OnClick = 'newItem(0)'>新项目</a></li>
+                                        <li><a style = 'cursor:pointer' OnClick = 'newItem(1)'>地上建筑</a></li>
+                                        <li><a style = 'cursor:pointer' OnClick = 'newItem(2)'>地下室</a></li>
                                     </ul>
                                 </li>
                             </ul>
-
-                            <form class="navbar-form navbar-right">
+                            <div class="navbar-form navbar-right">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Search">
+                                    <input type="text" class="form-control" id="searchInput" placeholder="Search">
                                 </div>
-                                <button type="submit" class="btn btn-default">搜索</button>
-                            </form>
-
-
+                                <button class="btn btn-default" OnClick="searchItem()">搜索</button>
+                            </div>
                         </div>
                     </div>
                 </nav>
 
                 <div id="list">
                     <ul id="myTab" class="nav nav-tabs">
-                        <li class="active"><a href="#proTable" data-toggle="tab">项目列表</a></li>
-                        <li><a href="#superStructureTable" data-toggle="tab">地上建筑单体列表</a></li>
-                        <li><a href="#basementTable" data-toggle="tab">地下室单体列表</a></li>
+                        <li class="active"><a href="#proTable" data-toggle="tab" OnClick="tabSelect(0)">项目列表</a></li>
+                        <li><a href="#superStructureTable" data-toggle="tab" OnClick="tabSelect(1)">地上建筑单体列表</a></li>
+                        <li><a href="#basementTable" data-toggle="tab" OnClick="tabSelect(2)">地下室单体列表</a></li>
                     </ul>
                     <div id="myTabContent" class="tab-content">
                         <div class="tab-pane fade in active" id="proTable">
@@ -125,23 +123,25 @@
                                         <th>开发商</th>
                                         <th>基本风压</th>
                                         <th>基本雪压</th>
-                                        <th>操作</th>
+                                        <th>输入者id</th>
+                                        <th style="min-width: 220px">操作</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-                                        $proRes = $pdo->query("SELECT * FROM Project");
+                                        $proRes = $pdo->query("SELECT * FROM Project WHERE isExisting = 1");
                                         $proNum = 0;
                                         foreach ($proRes as $row) {
                                             echo "<tr class='projectTable'>";
-                                            echo "<td>".$row['projectName']."</td>";
+                                            echo "<td name ='itemName'>".$row['projectName']."</td>";
                                             echo "<td>".$row['buildingType']."</td>";
                                             echo "<td>".$row['city']."</td>";
                                             echo "<td>".$row['seismicPreIntensity']."</td>";
                                             echo "<td>".$row['developer']."</td>";
-                                            echo "<td>".$row['basicWindPresure']."</td>";
-                                            echo "<td>".$row['basicSnowPresure']."</td>";
-                                            echo "<td><button class='btn btn-info'>查看</button> <button class='btn btn-success'>更新</button> <button class='btn btn-warning''>删除</button></td>";
+                                            echo "<td>".$row['basicWindPressure']."</td>";
+                                            echo "<td>".$row['basicSnowPressure']."</td>";
+                                            echo "<td>".$row['inputerID']."</td>";
+                                            echo "<td><button class='btn btn-info'  OnClick='viewInfo(0,$proNum)'>查看</button> <button class='btn btn-success' OnClick='updateItem(0,$proNum)'>更新</button> <button class='btn btn-warning' OnClick='deleteItem(0,$proNum, fresh)'>删除</button></td>";
                                             echo "</tr>";
                                             $proNum += 1;
                                         }
@@ -162,7 +162,6 @@
                                                 $temp = $i+1;
                                                 echo "<li><a style = 'cursor:pointer' OnClick = 'pageChange(0,$i)'>".$temp."</a></li>";
                                             }
-                                            
                                         ?>
                                         <li>
                                             <a href="#" aria-label="Next">
@@ -186,12 +185,13 @@
                                         <th>混凝土实算值(标准层)</th>
                                         <th>钢材实算值(裙房)</th>
                                         <th>钢材料实算值(标准层)</th>
-                                        <th>操作</th>
+                                        <th>输入者id</th>
+                                        <th style="min-width: 220px">操作</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-                                        $supStrRes = $pdo->query("SELECT * FROM superStructure");
+                                        $supStrRes = $pdo->query("SELECT * FROM superStructure WHERE isExisting = 1");
                                         $supStrNum = 0;
                                         foreach ($supStrRes as $row) {
                                             echo "<tr class='supStrTable'>";
@@ -204,7 +204,8 @@
                                             echo "<td>".$row['concreteStandardReal']."</td>";
                                             echo "<td>".$row['steelPodiumReal']."</td>";
                                             echo "<td>".$row['steelStandardReal']."</td>";
-                                            echo "<td><button class='btn btn-info'>查看</button> <button class='btn btn-success'>更新</button> <button class='btn btn-warning''>删除</button></td>";
+                                            echo "<td>".$row['inputerID']."</td>";
+                                            echo "<td><button class='btn btn-info' OnClick='viewInfo(1,$supStrNum)'>查看</button> <button class='btn btn-success' OnClick='updateItem(1,$supStrNum)'>更新</button> <button class='btn btn-warning' OnClick='deleteItem(1,$supStrNum,fresh)'>删除</button></td>";
                                             echo "</tr>";
                                             $supStrNum+=1;
                                         }
@@ -246,17 +247,16 @@
                                         <th>人防面积</th>
                                         <th>面积</th>
                                         <th>结构形式</th>
-                                        <th>水位</th>
-                                        <th>覆土高度</th>
                                         <th>钢筋(综合)</th>
                                         <th>混凝土(综合)</th>
                                         <th>钢材(综合)</th>
-                                        <th>操作</th>
+                                        <th>输入者id</th>
+                                        <th style="min-width: 220px">操作</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-                                        $basementRes = $pdo->query("SELECT * FROM basement");
+                                        $basementRes = $pdo->query("SELECT * FROM basement WHERE isExisting = 1");
                                         $basementNum = 0;
                                         foreach ($basementRes as $row) {
                                             echo "<tr class='basementTable'>";
@@ -271,12 +271,11 @@
                                             echo "<td>".$row['airShelterArea']."</td>";
                                             echo "<td>".$row['basementArea']."</td>";
                                             echo "<td>".$row['basementStructure']."</td>";
-                                            echo "<td>".$row['waterLevel']."</td>";
-                                            echo "<td>".$row['coveredDepth']."</td>";
                                             echo "<td>".$row['rebarIntegrated']."</td>";
                                             echo "<td>".$row['concreteIntegrated']."</td>";
                                             echo "<td>".$row['steelIntegrated']."</td>";
-                                            echo "<td><button class='btn btn-info'>查看</button> <button class='btn btn-success'>更新</button> <button class='btn btn-warning''>删除</button></td>";
+                                            echo "<td>".$row['inputerID']."</td>";
+                                            echo "<td><button class='btn btn-info' OnClick='viewInfo(2,$basementNum)'>查看</button> <button class='btn btn-success' OnClick='updateItem(2,$basementNum)'>更新</button> <button class='btn btn-warning' OnClick='deleteItem(2,$basementNum,fresh)'>删除</button></td>";
                                             echo "</tr>";
                                             $basementNum+=1;
                                         }
@@ -316,6 +315,7 @@
     <script src="../js/jquery-3.1.1.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
     <script>
+        var tabSelected = 0;
         function setNavHeight() {
             var h = $('#main').height();
             var padH = 0;
@@ -324,6 +324,9 @@
         }
 
         window.onload = function() {
+            <?php
+                $_COOKIE["itemName"]='';
+            ?>
             setNavHeight();
             for (var i = 10; i < $('.projectTable').length; i++) {
                 $('.projectTable').eq(i).css('display', 'none');
@@ -333,6 +336,10 @@
             }
             for (var i = 10; i < $('.basementTable').length; i++) {
                 $('.basementTable').eq(i).css('display', 'none');
+            }
+            if(document.cookie.match("reload") == '1'){
+                document.cookie = "reload=0";
+                setTimeout(location.reload(true),1000);
             }
         }
 
@@ -358,6 +365,134 @@
             
             alert(pageNO);
         }
+
+        function newItem(type){
+            <?php
+                $_SESSION["operation"] = 0;
+            ?>
+            if (type == 0) {
+                window.location.href="/src/projectsForm.php";
+            }
+            if (type == 1) {
+                window.location.href="/src/superStructureForm.php";
+            }
+            if (type == 2) {
+                window.location.href="/src/basementForm.php";
+            }
+        }
+
+        function viewInfo(type,itemNO){
+            <?php
+                $_SESSION["operation"] = 1;
+            ?>
+            if (type == 0) {
+                document.cookie = "itemName="+$('.projectTable')[itemNO].childNodes[0].textContent;
+                window.location.href="/src/projectsForm.php";
+            }
+            if (type == 1) {
+                document.cookie = "itemName="+$('.supStrTable')[itemNO].childNodes[0].textContent;
+                window.location.href="/src/superStructureForm.php";
+            }
+            if (type == 2) {
+                document.cookie = "itemName="+$('.basementTable')[itemNO].childNodes[0].textContent;
+                window.location.href="/src/basementForm.php";
+            }
+        }
+
+        function deleteItem(type,itemNO,callback){
+            if (<?php echo $_SESSION["authority"];?> != 3 || $('.projectTable')[itemNO].childNodes[7].textContent == <?php echo $_SESSION["id"];?>) {
+                if(confirm("确认删除？")){
+                    if (type == 0) {
+                        document.cookie = "itemName="+$('.projectTable')[itemNO].childNodes[0].textContent;
+                        <?php
+                            $pdo->query("UPDATE Project SET isExisting = 0 WHERE projectName = '".$_COOKIE["itemName"]."'");
+                            $_COOKIE["itemName"]='';
+                        ?>
+                    }
+                    if (type == 1) {
+                        document.cookie = "itemName="+$('.supStrTable')[itemNO].childNodes[0].textContent;
+                        <?php
+                            $pdo->query("UPDATE superStructure SET isExisting = 0 WHERE name = '".$_COOKIE["itemName"]."'");
+                            $_COOKIE["itemName"]='';
+                        ?>
+                    }
+                    if (type == 2) {
+                        document.cookie = "itemName="+$('.basementTable')[itemNO].childNodes[0].textContent;
+                        <?php
+                            $pdo->query("UPDATE basement SET isExisting = 0 WHERE name = '".$_COOKIE["itemName"]."'");
+                            $_COOKIE["itemName"]='';
+                        ?>
+                    }
+                    callback();
+                }
+            }else{
+                alert("没有权限！");
+            }
+        }
+
+        function fresh(){
+            document.cookie = "reload=1";
+            location.reload(true);
+        }
+
+        function updateItem(type,itemNO){
+            if (<?php echo $_SESSION["authority"];?> != 3 || $('.projectTable')[itemNO].childNodes[7].textContent == <?php echo $_SESSION["id"];?>) {
+                <?php
+                    $_SESSION["operation"] = 2;
+                ?>
+                if (type == 0) {
+                    document.cookie = "itemName="+$('.projectTable')[itemNO].childNodes[0].textContent;
+                    window.location.href="/src/projectsForm.php";
+                }
+                if (type == 1) {
+                    document.cookie = "itemName="+$('.supStrTable')[itemNO].childNodes[0].textContent;
+                    window.location.href="/src/superStructureForm.php";
+                }
+                if (type == 2) {
+                    document.cookie = "itemName="+$('.basementTable')[itemNO].childNodes[0].textContent;
+                    window.location.href="/src/basementForm.php";
+                }
+            }else{
+                alert("没有权限！");
+            }
+        }
+        function tabSelect(tab){
+            tabSelected = tab;
+        }
+
+        function searchItem(){
+            keyword = document.getElementById('searchInput').value;
+            if (keyword.length == 0) {
+                $('.projectTable').css('display', '');
+                $('.supStrTable').css('display', '');
+                $('.basementTable').css('display', '');
+                for (var i = 10; i < $('.projectTable').length; i++) {
+                    $('.projectTable').eq(i).css('display', 'none');
+                }
+                for (var i = 10; i < $('.supStrTable').length; i++) {
+                    $('.supStrTable').eq(i).css('display', 'none');
+                }
+                for (var i = 10; i < $('.basementTable').length; i++) {
+                    $('.basementTable').eq(i).css('display', 'none');
+                }
+            }else{
+                tableAll = $('.projectTable');
+                if (tabSelected == 1){
+                    tableAll = $('.supStrTable');
+                }
+                if (tabSelected == 2) {
+                    tableAll = $('.basementTable');
+                }
+                for (var i = tableAll.length - 1; i >= 0; i--) {
+                    if (tableAll[i].childNodes[0].textContent == keyword) {
+                        tableAll.eq(i).css('display', '')
+                    }else{
+                        tableAll.eq(i).css('display', 'none')
+                    }
+                }
+            }            
+        }
+
     </script>
 </body>
 
