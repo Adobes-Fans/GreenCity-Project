@@ -3,7 +3,7 @@
 <?php
     session_start();
     $pdo = new PDO('mysql:host=localhost;dbname=GreenCity', "root", "123456", array(PDO::ATTR_PERSISTENT => true));
-
+     
     // echo "test";
     // if(isset($_SESSION["operation"])){
     //     echo $_SESSION["operation"];
@@ -204,10 +204,10 @@
                     <div class="form-group form-group-lg">
                         <label for="inputEmail3" class="col-md-3 control-label"><span class="mustType">* </span>是否有阁楼：</label>
                         <div class="col-md-2">
-                            <input type="radio" name="loft" required><label class="control-label singleSelect">有</label>
+                            <input type="radio" name="loft" value="true" required><label class="control-label singleSelect">有</label>
                         </div>
                         <div class="col-md-2">
-                            <input type="radio" name="loft" required><label class="control-label singleSelect">无</label>
+                            <input type="radio" name="loft" value="false" required><label class="control-label singleSelect">无</label>
                         </div>
                     </div>
                     <div class="form-group form-group-lg">
@@ -331,7 +331,7 @@
 
                     <div class="form-group form-group-lg">
                         <div class="col-md-offset-5 col-md-3" style="padding-top: 20px; padding-bottom: 20px; margin-bottom: 0">
-                            <button type=" submit " class="btn btn-info btn-default btn-lg ">提交地上建筑</button>
+                            <button type="button" class="btn btn-info btn-default btn-lg " OnClick="submitForm()">提交地上建筑</button>
                         </div>
                     </div>
                 </form>
@@ -343,6 +343,7 @@
     <script src="../js/bootstrap.min.js "></script>
     <script src="../js/bootstrap-datetimepicker.min.js"></script>
     <script>
+        operation = <?php echo $_COOKIE["operation"];?>;
         function setNavHeight() {
             var h = $('#main').height();
             var padH = $('#main').css('padding-top');
@@ -353,28 +354,66 @@
         window.onload = function() {
             setNavHeight();
             allInput = $(".form-control");
-            // val()
             <?php
-                if(isset($_SESSION["operation"]) && $_SESSION["operation"]!=0){
-                    $existRecord = $pdo->query("SELECT * FROM superStructure")->fetch();
-                    $(".form-control").eq(0).val($existRecord["name"]);
-                    $(".form-control").eq(1).val($existRecord[]);
-                    $(".form-control").eq(2).val($existRecord[]);
-                    $(".form-control").eq(3).val($existRecord[]);
-                    $(".form-control").eq(4).val($existRecord[]);
-                    $(".form-control").eq(5).val($existRecord[]);
-                    $(".form-control").eq(6).val($existRecord[]);
-                    $(".form-control").eq(7).val($existRecord[]);
-                    $(".form-control").eq(8).val($existRecord[]);
-                    $(".form-control").eq(9).val($existRecord[]);
-                    $(".form-control").eq(10).val($existRecord[]);
-                    $(".form-control").eq(11).val($existRecord[]);
-                    $(".form-control").eq(12).val($existRecord[]);
-                    if ($_SESSION["operation"]==1) {
-                        #view
-                    }
+                if(isset($_COOKIE["operation"]) and $_COOKIE["operation"]!=0){
+                    $sqlquery = "SELECT * FROM superStructure WHERE name = '".$_COOKIE['itemName']."'";
+                    // echo "alert(\"$sqlquery\");";
+                    $rs = $pdo->query($sqlquery);
+                    $existRecord = $rs->fetch();
                 }
-            ?>            
+            ?>
+            if(operation!=0){
+                allInput.eq(0).val('<?php echo $existRecord["name"]; ?>');
+                mainType = '<?php echo $existRecord["mainType"]; ?>';
+                if (mainType != "框架结构" && mainType != "框架—剪力墙（支撑）结构" && mainType != "剪力墙结构" && mainType != "框架—核心筒结构" && mainType != "筒中筒结构" && mainType != "板柱—剪力墙结构" && mainType != "异形柱框架结构" && mainType != "异形柱框架—剪力墙结构") {
+                    allInput.eq(2).val("其它");
+                    allInput.eq(3).val(mainType);
+                }else{
+                    allInput.eq(2).val(mainType);
+                }
+                allInput.eq(4).val('<?php echo $existRecord["mainMeterial"]; ?>');
+                allInput.eq(5).val('<?php echo $existRecord["floor"]; ?>');
+                allInput.eq(6).val('<?php echo $existRecord["height"]; ?>');
+                allInput.eq(7).val('<?php echo $existRecord["deepWidthRadioMin"]; ?>');
+                allInput.eq(8).val('<?php echo $existRecord["deepWidthRadioMax"]; ?>');
+                allInput.eq(9).val('<?php echo $existRecord["deepLengthRadioMin"]; ?>');
+                allInput.eq(10).val('<?php echo $existRecord["deepLengthRadioMax"]; ?>');
+                allInput.eq(12).val('<?php echo $existRecord["designBegin"]; ?>');
+                allInput.eq(13).val('<?php echo $existRecord["designEnd"]; ?>');
+                allInput.eq(14).val('<?php echo $existRecord["softwaveAndVer"]; ?>');
+                allInput.eq(15).val('<?php echo $existRecord["rebarPodiumReal"]; ?>');
+                allInput.eq(16).val('<?php echo $existRecord["rebarPodiumTheo"]; ?>');
+                allInput.eq(17).val('<?php echo $existRecord["rebarStandardReal"]; ?>');
+                allInput.eq(18).val('<?php echo $existRecord["rebarStandardTheo"]; ?>');
+                allInput.eq(19).val('<?php echo $existRecord["concretePodiumReal"]; ?>');
+                allInput.eq(20).val('<?php echo $existRecord["concretePodiumTheo"]; ?>');
+                allInput.eq(21).val('<?php echo $existRecord["concreteStandardReal"]; ?>');
+                allInput.eq(22).val('<?php echo $existRecord["concreteStandardTheo"]; ?>');
+                allInput.eq(23).val('<?php echo $existRecord["steelPodiumReal"]; ?>');
+                allInput.eq(24).val('<?php echo $existRecord["steelPodiumTheo"]; ?>');
+                allInput.eq(25).val('<?php echo $existRecord["steelStandardReal"]; ?>');
+                allInput.eq(26).val('<?php echo $existRecord["steelStandardTheo"]; ?>');
+                document.getElementById('selectedPro').innerHTML = '<?php echo $existRecord["projectName"]; ?>';
+                if ('<?php echo $existRecord["havaLoft"]; ?>' == '1') {
+                    $("input[name='loft']").eq(0).prop("checked",true);
+                }else{
+                    $("input[name='loft']").eq(1).prop("checked",true);
+                }
+                if ('<?php echo $existRecord["seismicOverrun"]; ?>' == '1') {
+                    $('input[name="earthquake"]').eq(0).prop("checked",true);
+                    allInput.eq(11).val('<?php echo $existRecord["seismicPerformance"]; ?>');
+                    $('#earthquakePerformance').css('display', 'block');
+                }else{
+                    $('input[name="earthquake"]').eq(1).prop("checked",true);
+                }
+                if(operation == 1){
+                    allInput.prop("disabled",true);
+                    $('input[name="earthquake"]').prop("disabled",true);
+                    $("input[name='loft']").prop("disabled",true);
+                    $("button").prop("disabled",true);
+                }
+                document.cookie = "superStructureID="+"<?php echo $existRecord['id']; ?>";
+            }
         }
 
         $('#structureType1').change(function() {
@@ -432,7 +471,55 @@
                 document.getElementById('selectedPro').innerHTML = selected.parent().parent().children().eq(0).text();
             }
         }
+        function submitForm(){
+            document.cookie = "name="+allInput.eq(0).val();
+            if (allInput.eq(2).val() == "其它") {
+                document.cookie = "mainType="+allInput.eq(3).val();
+            }else{
+                document.cookie = "mainType="+allInput.eq(2).val();
+            }
+            document.cookie = "mainMeterial="+allInput.eq(4).val();
+            document.cookie = "floor="+allInput.eq(5).val();
+            document.cookie = "height="+allInput.eq(6).val();
+            document.cookie = "deepWidthRadioMin="+allInput.eq(7).val();
+            document.cookie = "deepWidthRadioMax="+allInput.eq(8).val();
+            document.cookie = "deepLengthRadioMin="+allInput.eq(9).val();
+            document.cookie = "deepLengthRadioMax="+allInput.eq(10).val();
+            document.cookie = "designBegin="+allInput.eq(12).val();
+            document.cookie = "designEnd="+allInput.eq(13).val();
+            document.cookie = "softwaveAndVer="+allInput.eq(14).val();
+            document.cookie = "rebarPodiumReal="+allInput.eq(15).val();
+            document.cookie = "rebarPodiumTheo="+allInput.eq(16).val();
+            document.cookie = "rebarStandardReal="+allInput.eq(17).val();
+            document.cookie = "rebarStandardTheo="+allInput.eq(18).val();
+            document.cookie = "concretePodiumReal="+allInput.eq(19).val();
+            document.cookie = "concretePodiumTheo="+allInput.eq(20).val();
+            document.cookie = "concreteStandardReal="+allInput.eq(21).val();
+            document.cookie = "concreteStandardTheo="+allInput.eq(22).val();
+            document.cookie = "steelPodiumReal="+allInput.eq(23).val();
+            document.cookie = "steelPodiumTheo="+allInput.eq(24).val();
+            document.cookie = "steelStandardReal="+allInput.eq(25).val();
+            document.cookie = "steelStandardTheo="+allInput.eq(26).val();
+            projectNameNow = document.getElementById('selectedPro').innerHTML
+            document.cookie = "projectName="+projectNameNow;
+            if ($('input:radio[name="loft"]').val() == "true") {
+                document.cookie = "havaLoft=1";
+            }else{
+                document.cookie = "havaLoft=0";
+            }
+            if ($('input:radio[name="earthquake"]').val() == "true") {
+                document.cookie = "seismicOverrun=1";
+                if (allInput.eq(11).val() == "C+D") {
+                    document.cookie = "seismicPerformance=C%2BD"
+                }else{
+                    document.cookie = "seismicPerformance="+allInput.eq(11).val();
+                }
+            }else{
+                document.cookie = "seismicOverrun=0";
+                document.cookie = "seismicPerformance=''";
+            }
+            window.location.href="/src/superStructureOperate.php";
+        }
     </script>
 </body>
-
 </html>

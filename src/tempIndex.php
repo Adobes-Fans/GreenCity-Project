@@ -1,7 +1,7 @@
 <?php
     $pdo = new PDO('mysql:host=localhost;dbname=GreenCity', "root", "123456", array(PDO::ATTR_PERSISTENT => true));
     session_start();
-    $sqlstr = "select * from user where name = 'BBB'";
+    $sqlstr = "select * from user where name = 'AAA'";
     $rs=$pdo->query($sqlstr);
     $record = $rs->fetch();
     $_SESSION["id"] = $record['id'];

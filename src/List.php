@@ -367,9 +367,7 @@
         }
 
         function newItem(type){
-            <?php
-                $_SESSION["operation"] = 0;
-            ?>
+            document.cookie = "operation=0";
             if (type == 0) {
                 window.location.href="/src/projectsForm.php";
             }
@@ -382,9 +380,7 @@
         }
 
         function viewInfo(type,itemNO){
-            <?php
-                $_SESSION["operation"] = 1;
-            ?>
+            document.cookie = "operation=1";
             if (type == 0) {
                 document.cookie = "itemName="+$('.projectTable')[itemNO].childNodes[0].textContent;
                 window.location.href="/src/projectsForm.php";
@@ -400,7 +396,7 @@
         }
 
         function deleteItem(type,itemNO,callback){
-            if (<?php echo $_SESSION["authority"];?> != 3 || $('.projectTable')[itemNO].childNodes[7].textContent == <?php echo $_SESSION["id"];?>) {
+            if (<?php echo $_SESSION["authority"];?> != 3 || $('.projectTable')[itemNO].childNodes[7].textContent == '<?php echo $_SESSION["id"];?>') {
                 if(confirm("确认删除？")){
                     if (type == 0) {
                         document.cookie = "itemName="+$('.projectTable')[itemNO].childNodes[0].textContent;
@@ -437,9 +433,7 @@
 
         function updateItem(type,itemNO){
             if (<?php echo $_SESSION["authority"];?> != 3 || $('.projectTable')[itemNO].childNodes[7].textContent == <?php echo $_SESSION["id"];?>) {
-                <?php
-                    $_SESSION["operation"] = 2;
-                ?>
+                document.cookie = "operation=2";
                 if (type == 0) {
                     document.cookie = "itemName="+$('.projectTable')[itemNO].childNodes[0].textContent;
                     window.location.href="/src/projectsForm.php";
