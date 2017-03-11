@@ -141,7 +141,7 @@
                                             echo "<td>".$row['basicWindPressure']."</td>";
                                             echo "<td>".$row['basicSnowPressure']."</td>";
                                             echo "<td>".$row['inputerID']."</td>";
-                                            echo "<td><button class='btn btn-info'  OnClick='viewInfo(0,$proNum)'>查看</button> <button class='btn btn-success' OnClick='updateItem(0,$proNum)'>更新</button> <button class='btn btn-warning' OnClick='deleteItem(0,$proNum, fresh)'>删除</button></td>";
+                                            echo "<td><button class='btn btn-info'  OnClick='viewInfo(0,$proNum)'>查看</button> <button class='btn btn-success' OnClick='updateItem(0,$proNum)'>更新</button> <button class='btn btn-warning' OnClick='deleteItem(0,$proNum)'>删除</button></td>";
                                             echo "</tr>";
                                             $proNum += 1;
                                         }
@@ -205,7 +205,7 @@
                                             echo "<td>".$row['steelPodiumReal']."</td>";
                                             echo "<td>".$row['steelStandardReal']."</td>";
                                             echo "<td>".$row['inputerID']."</td>";
-                                            echo "<td><button class='btn btn-info' OnClick='viewInfo(1,$supStrNum)'>查看</button> <button class='btn btn-success' OnClick='updateItem(1,$supStrNum)'>更新</button> <button class='btn btn-warning' OnClick='deleteItem(1,$supStrNum,fresh)'>删除</button></td>";
+                                            echo "<td><button class='btn btn-info' OnClick='viewInfo(1,$supStrNum)'>查看</button> <button class='btn btn-success' OnClick='updateItem(1,$supStrNum)'>更新</button> <button class='btn btn-warning' OnClick='deleteItem(1,$supStrNum)'>删除</button></td>";
                                             echo "</tr>";
                                             $supStrNum+=1;
                                         }
@@ -275,7 +275,7 @@
                                             echo "<td>".$row['concreteIntegrated']."</td>";
                                             echo "<td>".$row['steelIntegrated']."</td>";
                                             echo "<td>".$row['inputerID']."</td>";
-                                            echo "<td><button class='btn btn-info' OnClick='viewInfo(2,$basementNum)'>查看</button> <button class='btn btn-success' OnClick='updateItem(2,$basementNum)'>更新</button> <button class='btn btn-warning' OnClick='deleteItem(2,$basementNum,fresh)'>删除</button></td>";
+                                            echo "<td><button class='btn btn-info' OnClick='viewInfo(2,$basementNum)'>查看</button> <button class='btn btn-success' OnClick='updateItem(2,$basementNum)'>更新</button> <button class='btn btn-warning' OnClick='deleteItem(2,$basementNum)'>删除</button></td>";
                                             echo "</tr>";
                                             $basementNum+=1;
                                         }
@@ -337,10 +337,11 @@
             for (var i = 10; i < $('.basementTable').length; i++) {
                 $('.basementTable').eq(i).css('display', 'none');
             }
-            if(document.cookie.match("reload") == '1'){
-                document.cookie = "reload=0";
-                setTimeout(location.reload(true),1000);
-            }
+            // if($.cookie("reload") == "1"){
+            //     // document.cookie = "reload=0";
+            //     $.cookie("reload","0");
+            //     setTimeout(location.reload(true),1000);
+            // }
         }
 
         function pageChange(type,pageNO){
@@ -395,40 +396,27 @@
             }
         }
 
-        function deleteItem(type,itemNO,callback){
+        function deleteItem(type,itemNO){
             if (<?php echo $_SESSION["authority"];?> != 3 || $('.projectTable')[itemNO].childNodes[7].textContent == '<?php echo $_SESSION["id"];?>') {
                 if(confirm("确认删除？")){
+                    document.cookie = "operation=3";
                     if (type == 0) {
                         document.cookie = "itemName="+$('.projectTable')[itemNO].childNodes[0].textContent;
-                        <?php
-                            $pdo->query("UPDATE Project SET isExisting = 0 WHERE projectName = '".$_COOKIE["itemName"]."'");
-                            $_COOKIE["itemName"]='';
-                        ?>
+                        document.cookie = "deleteType=0";
                     }
                     if (type == 1) {
                         document.cookie = "itemName="+$('.supStrTable')[itemNO].childNodes[0].textContent;
-                        <?php
-                            $pdo->query("UPDATE superStructure SET isExisting = 0 WHERE name = '".$_COOKIE["itemName"]."'");
-                            $_COOKIE["itemName"]='';
-                        ?>
+                        document.cookie = "deleteType=1";
                     }
                     if (type == 2) {
                         document.cookie = "itemName="+$('.basementTable')[itemNO].childNodes[0].textContent;
-                        <?php
-                            $pdo->query("UPDATE basement SET isExisting = 0 WHERE name = '".$_COOKIE["itemName"]."'");
-                            $_COOKIE["itemName"]='';
-                        ?>
+                        document.cookie = "deleteType=2";
                     }
-                    callback();
+                    window.location.href="/src/deleteOperation.php";
                 }
             }else{
                 alert("没有权限！");
             }
-        }
-
-        function fresh(){
-            document.cookie = "reload=1";
-            location.reload(true);
         }
 
         function updateItem(type,itemNO){

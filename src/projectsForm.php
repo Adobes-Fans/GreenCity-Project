@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 
+<?php
+    session_start();
+    $pdo = new PDO('mysql:host=localhost;dbname=GreenCity', "root", "123456", array(PDO::ATTR_PERSISTENT => true)); 
+    if(isset($_SESSION["operation"])){
+        echo $_SESSION["operation"];
+    }
+?>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -50,11 +57,11 @@
                 <div class="row">
                     <h2>项目总体信息录入</h2>
                 </div>
-                <form class="form-horizontal">
+                <form class="form-horizontal" action = "addProjects.php" method = "post">
                     <div class="form-group form-group-lg">
                         <label for="inputEmail3" class="col-md-3 control-label"><span class="mustType">* </span>项目名称：</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control" placeholder="Project Name" required>
+                            <input type="text" class="form-control" placeholder="Project Name" name = "projectName" required>
                         </div>
                     </div>
                     <div class="form-group form-group-lg">
@@ -87,7 +94,7 @@
                     </div>
                     <div class="form-group form-group-lg" id="buildingType2" style="display: none">
                         <div class="col-md-offset-3 col-md-9">
-                            <select class="form-control" multiple>
+                            <select class="form-control" name = "buildingType" multiple>
                                 <option>别墅</option>
                                 <option>合院</option>
                                 <option>排屋</option>
@@ -99,13 +106,13 @@
                     <div class="form-group form-group-lg">
                         <label for="inputEmail3" class="col-md-3 control-label">所在城市：</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control" placeholder="Location">
+                            <input type="text" class="form-control" placeholder="Location" name = "city">
                         </div>
                     </div>
                     <div class="form-group form-group-lg">
                         <label for="inputEmail3" class="col-md-3 control-label"><span class="mustType">* </span>抗震烈度：</label>
                         <div class="col-md-9">
-                            <select class="form-control" multiple required> 
+                            <select class="form-control" name = "seismicPreIntensity" multiple required> 
                                 <option>非抗震</option>
                                 <option>6度</option>
                                 <option>7度</option>
@@ -119,19 +126,19 @@
                     <div class="form-group form-group-lg">
                         <label for="inputEmail3" class="col-md-3 control-label">开发商：</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control" placeholder="Developer">
+                            <input type="text" class="form-control" placeholder="Developer" name = "developer">
                         </div>
                     </div>
                     <div class="form-group form-group-lg">
                         <label for="inputEmail3" class="col-md-3 control-label">基本风压：</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control" placeholder="Wind Presssure">
+                            <input type="text" class="form-control" placeholder="Wind Pressure" name = "basicWindPressure">
                         </div>
                     </div>
                     <div class="form-group form-group-lg">
                         <label for="inputEmail3" class="col-md-3 control-label">基本雪压：</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control" placeholder="Snow Presssure">
+                            <input type="text" class="form-control" placeholder="Snow Pressure" name = "basicSnowPressure">
                         </div>
                     </div>
                     <div class="form-group form-group-lg">
