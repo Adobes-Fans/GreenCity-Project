@@ -3,8 +3,8 @@
 <?php
     session_start();
     $pdo = new PDO('mysql:host=localhost;dbname=GreenCity', "root", "123456", array(PDO::ATTR_PERSISTENT => true));
-    echo "hello world!";
-    echo "test";
+    // echo "hello world!";
+    // echo "test";
 ?>
 <body> 
 <?php

@@ -443,7 +443,7 @@
         }
 
         function searchItem(){
-            keyword = document.getElementById('searchInput').value;
+            var keyword = document.getElementById('searchInput').value;
             if (keyword.length == 0) {
                 $('.projectTable').css('display', '');
                 $('.supStrTable').css('display', '');
@@ -466,7 +466,7 @@
                     tableAll = $('.basementTable');
                 }
                 for (var i = tableAll.length - 1; i >= 0; i--) {
-                    if (tableAll[i].childNodes[0].textContent == keyword) {
+                    if (tableAll[i].childNodes[0].textContent.search(keyword) != -1) {
                         tableAll.eq(i).css('display', '')
                     }else{
                         tableAll.eq(i).css('display', 'none')

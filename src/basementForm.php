@@ -3,12 +3,8 @@
 <?php
     session_start();
     $pdo = new PDO('mysql:host=localhost;dbname=GreenCity', "root", "123456", array(PDO::ATTR_PERSISTENT => true));
-    if(isset($_SESSION["operation"])){
-        echo $_SESSION["operation"];
-        echo "suc";
-    }
-    else {
-        echo "fail";
+    if(isset($_COOKIE["operation"])){
+        //echo $_COOKIE["operation"];
     }
 ?>
 <head>
@@ -107,7 +103,7 @@
                     </div>
                     <div class="form-group form-group-lg">
                         <label for="inputEmail3" class="col-md-3 control-label"><span class="mustType">* </span>对应项目：</label>
-                        <div class="col-md-4" style="margin-top:7px;" data-toggle="modal" data-target="#myModal">
+                        <div class="col-md-2" style="margin-top:7px;" data-toggle="modal" data-target="#myModal">
                             <button type="button" class="btn btn-info">选择项目</button>
                         </div>
                         <div class="col-md-3">
@@ -144,7 +140,7 @@
 
                                             <tbody>
                                                 <?php
-                                                    $proRes = $pdo->query("SELECT projectName, buildingType, inputerID, inputerName FROM Project");
+                                                    $proRes = $pdo->query("SELECT projectName, buildingType, inputerID, inputerName FROM Project WHERE isExisting = 1");
                                                     foreach ($proRes as $row) {
                                                         echo "<tr name='proTable' class = 'proTableClass'>";
                                                         echo "<td>".$row['projectName']."</td>";
@@ -225,7 +221,7 @@
                     <div class="form-group form-group-lg">
                         <label for="inputEmail3" class="col-md-3 control-label">地下室水位：</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control" placeholder="Water Level" name = "waterLevel">                            >
+                            <input type="text" class="form-control" placeholder="Water Level" name = "waterLevel">
                         </div>
                     </div>
                     <div class="form-group form-group-lg">
@@ -308,7 +304,7 @@
 
                     <div class="form-group form-group-lg">
                         <div class="col-md-offset-5 col-md-3" style="padding-top: 20px; padding-bottom: 20px; margin-bottom: 20px">
-                            <button type=" submit " class="btn btn-info btn-default btn-lg ">提交地上建筑</button>
+                            <button type=" submit " class="btn btn-info btn-default btn-lg " onClick = submitForm()>提交地上建筑</button>
                         </div>
                     </div>
                 </form>
@@ -320,6 +316,7 @@
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/bootstrap-datetimepicker.min.js"></script>
     <script>
+        operation = <?php echo $_COOKIE["operation"];?>;
         function setNavHeight() {
             var h = $('#main').height();
             var padH = $('#main').css('padding-top');
@@ -333,62 +330,58 @@
             <?php
                 if(isset($_COOKIE["operation"]) and $_COOKIE["operation"]!=0){
                     $sqlquery = "SELECT * FROM basement WHERE name = '".$_COOKIE['itemName']."'";
-                    // echo "alert(\"$sqlquery\");";
                     $rs = $pdo->query($sqlquery);
-                    $existRecord = $rs->fetch();
+                    $existRecord = $rs->fetch();             
                 }
             ?>
+            if ('<?php echo $existRecord["airShelter"]; ?>' == '1') {
+                    $("input[name='defence']").eq(0).prop("checked",true);
+                }else{
+                    $("input[name='defence']").eq(1).prop("checked",true);
+                }
             if(operation!=0){
                 allInput.eq(0).val('<?php echo $existRecord["name"]; ?>');
-                mainType = '<?php echo $existRecord["mainType"]; ?>';
-                if (mainType != "框架结构" && mainType != "框架—剪力墙（支撑）结构" && mainType != "剪力墙结构" && mainType != "框架—核心筒结构" && mainType != "筒中筒结构" && mainType != "板柱—剪力墙结构" && mainType != "异形柱框架结构" && mainType != "异形柱框架—剪力墙结构") {
-                    allInput.eq(2).val("其它");
-                    allInput.eq(3).val(mainType);
-                }else{
-                    allInput.eq(2).val(mainType);
-                }
-                allInput.eq(4).val('<?php echo $existRecord["mainMeterial"]; ?>');
-                allInput.eq(5).val('<?php echo $existRecord["floor"]; ?>');
-                allInput.eq(6).val('<?php echo $existRecord["height"]; ?>');
-                allInput.eq(7).val('<?php echo $existRecord["deepWidthRadioMin"]; ?>');
-                allInput.eq(8).val('<?php echo $existRecord["deepWidthRadioMax"]; ?>');
-                allInput.eq(9).val('<?php echo $existRecord["deepLengthRadioMin"]; ?>');
-                allInput.eq(10).val('<?php echo $existRecord["deepLengthRadioMax"]; ?>');
-                allInput.eq(12).val('<?php echo $existRecord["designBegin"]; ?>');
-                allInput.eq(13).val('<?php echo $existRecord["designEnd"]; ?>');
-                allInput.eq(14).val('<?php echo $existRecord["softwaveAndVer"]; ?>');
-                allInput.eq(15).val('<?php echo $existRecord["rebarPodiumReal"]; ?>');
-                allInput.eq(16).val('<?php echo $existRecord["rebarPodiumTheo"]; ?>');
-                allInput.eq(17).val('<?php echo $existRecord["rebarStandardReal"]; ?>');
-                allInput.eq(18).val('<?php echo $existRecord["rebarStandardTheo"]; ?>');
-                allInput.eq(19).val('<?php echo $existRecord["concretePodiumReal"]; ?>');
-                allInput.eq(20).val('<?php echo $existRecord["concretePodiumTheo"]; ?>');
-                allInput.eq(21).val('<?php echo $existRecord["concreteStandardReal"]; ?>');
-                allInput.eq(22).val('<?php echo $existRecord["concreteStandardTheo"]; ?>');
-                allInput.eq(23).val('<?php echo $existRecord["steelPodiumReal"]; ?>');
-                allInput.eq(24).val('<?php echo $existRecord["steelPodiumTheo"]; ?>');
-                allInput.eq(25).val('<?php echo $existRecord["steelStandardReal"]; ?>');
-                allInput.eq(26).val('<?php echo $existRecord["steelStandardTheo"]; ?>');
+                allInput.eq(2).val('<?php echo $existRecord["floor"]; ?>');
+                allInput.eq(3).val('<?php echo $existRecord["airShelterArea"]; ?>');
+                allInput.eq(4).val('<?php echo $existRecord["basementArea"]; ?>');
+                allInput.eq(5).val('<?php echo $existRecord["basementStructure"]; ?>');
+                allInput.eq(6).val('<?php echo $existRecord["designStartDay"]; ?>');
+                allInput.eq(7).val('<?php echo $existRecord["designEndDay"]; ?>');
+                allInput.eq(8).val('<?php echo $existRecord["waterLevel"]; ?>');
+                allInput.eq(9).val('<?php echo $existRecord["coveredDepth"]; ?>');
+                allInput.eq(10).val('<?php echo $existRecord["basementDescription"]; ?>');
+                allInput.eq(11).val('<?php echo $existRecord["rebarAirShelter"]; ?>');
+                allInput.eq(12).val('<?php echo $existRecord["rebarNoAirShelter"]; ?>');
+                allInput.eq(13).val('<?php echo $existRecord["rebarIntegrated"]; ?>');
+                allInput.eq(14).val('<?php echo $existRecord["rebarTower"]; ?>');
+                allInput.eq(15).val('<?php echo $existRecord["rebarNoTower"]; ?>');
+                allInput.eq(16).val('<?php echo $existRecord["concreteAirShelter"]; ?>');
+                allInput.eq(17).val('<?php echo $existRecord["concreteNoAirShelter"]; ?>');
+                allInput.eq(18).val('<?php echo $existRecord["concreteIntegrated"]; ?>');
+                allInput.eq(19).val('<?php echo $existRecord["concreteTower"]; ?>');
+                allInput.eq(20).val('<?php echo $existRecord["concreteNoTower"]; ?>');
+                allInput.eq(21).val('<?php echo $existRecord["steelAirShelter"]; ?>');
+                allInput.eq(22).val('<?php echo $existRecord["steelNoAirShelter"]; ?>');
+                allInput.eq(23).val('<?php echo $existRecord["steelIntegrated"]; ?>');
+                allInput.eq(24).val('<?php echo $existRecord["steelTower"]; ?>');
+                allInput.eq(25).val('<?php echo $existRecord["steelNoTower"]; ?>');
+
                 document.getElementById('selectedPro').innerHTML = '<?php echo $existRecord["projectName"]; ?>';
-                if ('<?php echo $existRecord["havaLoft"]; ?>' == '1') {
-                    $("input[name='loft']").eq(0).prop("checked",true);
+                if ('<?php echo $existRecord["airShelter"]; ?>' == '1') {
+                    $("input[name='defence']").eq(0).prop("checked",true);
+                    $('#defenceArea').css('display', 'block');
                 }else{
-                    $("input[name='loft']").eq(1).prop("checked",true);
+                    $("input[name='defence']").eq(1).prop("checked",true);
+                    $('#defenceArea').css('display', 'none');
                 }
-                if ('<?php echo $existRecord["seismicOverrun"]; ?>' == '1') {
-                    $('input[name="earthquake"]').eq(0).prop("checked",true);
-                    allInput.eq(11).val('<?php echo $existRecord["seismicPerformance"]; ?>');
-                    $('#earthquakePerformance').css('display', 'block');
-                }else{
-                    $('input[name="earthquake"]').eq(1).prop("checked",true);
-                }
+                
                 if(operation == 1){
                     allInput.prop("disabled",true);
-                    $('input[name="earthquake"]').prop("disabled",true);
-                    $("input[name='loft']").prop("disabled",true);
+                    $('input[name="defence"]').prop("disabled",true);
+    
                     $("button").prop("disabled",true);
                 }
-                document.cookie = "superStructureID="+"<?php echo $existRecord['id']; ?>";
+                document.cookie = "id="+"<?php echo $existRecord['id']; ?>";
             }
         }
 
@@ -396,8 +389,10 @@
             var val = $('input:radio[name="defence"]:checked').val();
             if (val == "true") {
                 $('#defenceArea').css('display', 'block');
+                document.cookie = "airShelter=1";
             } else {
                 $('#defenceArea').css('display', 'none');
+                document.cookie = "airShelter=0";
             }
 
             setNavHeight();
@@ -415,13 +410,18 @@
             todayBtn: 1,
         });
         function ProNameQuery(){
-            $proNameQueryArg = document.getElementById('ProName').value;
-            $proTable = document.getElementsByName('proTable');
-            for (var i = $proTable.length - 1; i >= 0; i--) {
-                if ($proTable[i].childNodes[0].textContent == $proNameQueryArg) {
-                    $('.proTableClass').eq(i).css('display', '')
-                }else{
-                    $('.proTableClass').eq(i).css('display', 'none')
+            proNameQueryArg = document.getElementById('ProName').value;
+            if(proNameQueryArg.length==0){
+                $('.proTableClass').css('display', '')
+            }
+            if(proNameQueryArg.length!=0){
+                proTable = document.getElementsByName('proTable');
+                for (var i = proTable.length - 1; i >= 0; i--) {
+                    if (proTable[i].childNodes[0].textContent.search(proNameQueryArg) != -1) {
+                        $('.proTableClass').eq(i).css('display', '');
+                    }else{
+                        $('.proTableClass').eq(i).css('display', 'none');
+                    }
                 }
             }
         }
@@ -430,6 +430,11 @@
             if (selected.length != 0) {
                 document.getElementById('selectedPro').innerHTML = selected.parent().parent().children().eq(0).text();
             }
+        }
+
+        function submitForm() {
+            projectNameNow = document.getElementById('selectedPro').innerHTML
+            document.cookie = "projectName="+projectNameNow;
         }
     </script>
 

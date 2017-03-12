@@ -4,9 +4,6 @@
 <?php
     session_start();
     $pdo = new PDO('mysql:host=localhost;dbname=GreenCity', "root", "123456", array(PDO::ATTR_PERSISTENT => true)); 
-    if(isset($_SESSION["operation"])){
-        echo $_SESSION["operation"];
-    }
 ?>
 <head>
     <meta charset="utf-8">
@@ -94,7 +91,7 @@
                     </div>
                     <div class="form-group form-group-lg" id="buildingType2" style="display: none">
                         <div class="col-md-offset-3 col-md-9">
-                            <select class="form-control" name = "buildingType" multiple>
+                            <select class="form-control" multiple>
                                 <option>别墅</option>
                                 <option>合院</option>
                                 <option>排屋</option>
@@ -143,7 +140,7 @@
                     </div>
                     <div class="form-group form-group-lg">
                         <div class="col-md-offset-5 col-md-3" style="padding-top: 20px; padding-bottom: 20px; margin-bottom: 80px">
-                            <button type="submit" class="btn btn-info btn-default btn-lg">提交项目</button>
+                            <button type="submit" class="btn btn-info btn-default btn-lg" onClick = submitForm()>提交项目</button>
                         </div>
                     </div>
                 </form>
@@ -154,17 +151,53 @@
     <script src="../js/jquery-3.1.1.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
     <script>
-        window.onload = function() {
-            setNavHeight();
-        }
+        operation = <?php echo $_COOKIE["operation"];?>;
 
         function setNavHeight() {
             var h = $('#main').height();
             var padH = $('#main').css('padding-top');
             var navH = Number(h.toString().substring(0, 5)) + Number(padH.toString().substring(0, 3));
-
             $('#nav').css('height', navH);
         }
+        window.onload = function() {
+            setNavHeight();
+            allInput = $(".form-control");
+            <?php
+                if(isset($_COOKIE["operation"]) and $_COOKIE["operation"]!=0){
+                    $sqlquery = "SELECT * FROM Project WHERE projectName = '".$_COOKIE['itemName']."'";
+                    $rs = $pdo->query($sqlquery);
+                    $existRecord = $rs->fetch();             
+                }
+            ?>
+
+            if(operation!=0){
+                
+                allInput.eq(0).val('<?php echo $existRecord["projectName"]; ?>');
+                mainType = '<?php echo $existRecord["buildingType"]; ?>';
+                if (mainType != "别墅" && mainType != "合院" && mainType != "排屋" && mainType != "多高层普通住宅" && mainType != "酒店式公寓") {
+                    allInput.eq(2).val(mainType);
+                }else{
+                    allInput.eq(2).val("住宅");
+                    $('#buildingType2').css('display', 'block');
+                    allInput.eq(3).val(mainType);
+    
+                }
+                allInput.eq(4).val('<?php echo $existRecord["city"]; ?>');
+                allInput.eq(5).val('<?php echo $existRecord["seismicPreIntensity"]; ?>');
+                allInput.eq(6).val('<?php echo $existRecord["developer"]; ?>');
+                allInput.eq(7).val('<?php echo $existRecord["basicWindPressure"]; ?>');
+                allInput.eq(8).val('<?php echo $existRecord["basicSnowPressure"]; ?>');
+     
+                
+                if(operation == 1){
+                    allInput.prop("disabled",true);
+                    $("button").prop("disabled",true);
+                }
+                document.cookie = "projectName="+"<?php echo $existRecord['projectName']; ?>";
+                
+            }
+        }
+
 
         $('#buildingType1').change(function() {
             var text = $('#buildingType1').find("option:selected").text();
@@ -176,6 +209,14 @@
 
             setNavHeight();
         })
+
+        function submitForm() {
+            if (allInput.eq(2).val() == "住宅") {
+                document.cookie = "buildingType="+allInput.eq(3).val();
+            }else{
+                document.cookie = "buildingType="+allInput.eq(2).val();
+            }
+        }
     </script>
 </body>
 

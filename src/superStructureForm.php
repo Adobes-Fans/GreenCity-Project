@@ -142,7 +142,7 @@
 
                                             <tbody>
                                                 <?php
-                                                    $proRes = $pdo->query("SELECT projectName, buildingType, inputerID, inputerName FROM Project");
+                                                    $proRes = $pdo->query("SELECT projectName, buildingType, inputerID, inputerName FROM Project WHERE isExisting = 1");
                                                     foreach ($proRes as $row) {
                                                         echo "<tr name='proTable' class = 'proTableClass'>";
                                                         echo "<td>".$row['projectName']."</td>";
@@ -457,7 +457,7 @@
             if(proNameQueryArg.length!=0){
                 proTable = document.getElementsByName('proTable');
                 for (var i = proTable.length - 1; i >= 0; i--) {
-                    if (proTable[i].childNodes[0].textContent == proNameQueryArg) {
+                    if (proTable[i].childNodes[0].textContent.search(proNameQueryArg) != -1) {
                         $('.proTableClass').eq(i).css('display', '');
                     }else{
                         $('.proTableClass').eq(i).css('display', 'none');
