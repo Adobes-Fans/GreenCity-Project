@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: 2017-03-12 21:41:55
+-- Generation Time: 2017-03-15 22:57:50
 -- 服务器版本： 5.6.34-log
 -- PHP Version: 5.6.28
 
@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS `basement` (
   `authorID` varchar(256) NOT NULL,
   `authorIP` varchar(256) NOT NULL,
   `isExisting` tinyint(1) NOT NULL DEFAULT '1'
-) ENGINE=MyISAM AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=38 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -82,7 +82,7 @@ CREATE TABLE IF NOT EXISTS `Project` (
   `inputerIP` varchar(32) NOT NULL,
   `inputTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `isExisting` tinyint(1) NOT NULL DEFAULT '1'
-) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=44 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -127,36 +127,9 @@ CREATE TABLE IF NOT EXISTS `superStructure` (
   `inputerIP` varchar(32) NOT NULL,
   `inputTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `isExisting` tinyint(1) DEFAULT '1'
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
-
---
--- 表的结构 `user`
---
-
-CREATE TABLE IF NOT EXISTS `user` (
-  `id` int(4) NOT NULL,
-  `name` varchar(16) NOT NULL,
-  `nick_name` varchar(32) DEFAULT NULL,
-  `pwd` varchar(16) NOT NULL,
-  `group` enum('structure','architecture','gad') NOT NULL DEFAULT 'structure',
-  `authority` enum('1','2','3','0') NOT NULL DEFAULT '1',
-  `department` enum('default','ST1','ST2','ST3','AT1','JPS') DEFAULT 'default',
-  `isgrade` tinyint(2) NOT NULL DEFAULT '0',
-  `branch` enum('default','HZ','SHH','QD','FJ','CHQ') DEFAULT 'default',
-  `status` tinyint(2) DEFAULT '1'
-) ENGINE=MyISAM AUTO_INCREMENT=113 DEFAULT CHARSET=utf8;
-
---
--- 转存表中的数据 `user`
---
-
-INSERT INTO `user` (`id`, `name`, `nick_name`, `pwd`, `group`, `authority`, `department`, `isgrade`, `branch`, `status`) VALUES
-(1, 'admin1', 'admin1', 'admin1', 'structure', '1', 'ST1', 0, 'SHH', 1),
-(3, 'user1', 'user1', 'user1', 'structure', '3', 'ST1', 0, 'SHH', 1),
-(4, 'user2', 'user2', 'user2', 'structure', '3', 'ST1', 0, 'SHH', 1),
-(2, 'admin2', 'admin2', 'admin2', 'structure', '2', 'ST1', 0, 'SHH', 1);
 
 --
 -- Indexes for dumped tables
@@ -182,13 +155,6 @@ ALTER TABLE `superStructure`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `user`
---
-ALTER TABLE `user`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `name` (`name`);
-
---
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -196,22 +162,18 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `basement`
 --
 ALTER TABLE `basement`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=38;
 --
 -- AUTO_INCREMENT for table `Project`
 --
 ALTER TABLE `Project`
-  MODIFY `projectID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=22;
+  MODIFY `projectID` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=44;
 --
 -- AUTO_INCREMENT for table `superStructure`
 --
 ALTER TABLE `superStructure`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT for table `user`
---
-ALTER TABLE `user`
-  MODIFY `id` int(4) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=113;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=16;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

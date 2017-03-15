@@ -164,7 +164,7 @@
             allInput = $(".form-control");
             <?php
                 if(isset($_COOKIE["operation"]) and $_COOKIE["operation"]!=0){
-                    $sqlquery = "SELECT * FROM Project WHERE projectName = '".$_COOKIE['itemName']."'";
+                    $sqlquery = "SELECT * FROM Project WHERE projectID = '".$_COOKIE['itemName']."'";
                     $rs = $pdo->query($sqlquery);
                     $existRecord = $rs->fetch();             
                 }
@@ -193,6 +193,7 @@
                     allInput.prop("disabled",true);
                     $("button").prop("disabled",true);
                 }
+                document.cookie = "projectID="+"<?php echo $existRecord['projectID']; ?>";
                 document.cookie = "projectName="+"<?php echo $existRecord['projectName']; ?>";
                 
             }

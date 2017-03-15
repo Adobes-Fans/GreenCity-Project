@@ -116,6 +116,7 @@
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
+                                        <th>项目id</th>
                                         <th>项目名称</th>
                                         <th>建筑类型</th>
                                         <th>所在城市</th>
@@ -124,6 +125,7 @@
                                         <th>基本风压</th>
                                         <th>基本雪压</th>
                                         <th>输入者id</th>
+                                        <th>输入者姓名</th>
                                         <th style="min-width: 220px">操作</th>
                                     </tr>
                                 </thead>
@@ -133,6 +135,7 @@
                                         $proNum = 0;
                                         foreach ($proRes as $row) {
                                             echo "<tr class='projectTable'>";
+                                            echo "<td>".$row['projectID']."</td>";
                                             echo "<td name ='itemName'>".$row['projectName']."</td>";
                                             echo "<td>".$row['buildingType']."</td>";
                                             echo "<td>".$row['city']."</td>";
@@ -141,7 +144,8 @@
                                             echo "<td>".$row['basicWindPressure']."</td>";
                                             echo "<td>".$row['basicSnowPressure']."</td>";
                                             echo "<td>".$row['inputerID']."</td>";
-                                            echo "<td><button class='btn btn-info'  OnClick='viewInfo(0,$proNum)'>查看</button> <button class='btn btn-success' OnClick='updateItem(0,$proNum)'>更新</button> <button class='btn btn-warning' OnClick='deleteItem(0,$proNum)'>删除</button></td>";
+                                            echo "<td>".$row['inputerName']."</td>";
+                                            echo "<td><button class='btn btn-info'  OnClick='viewInfo(0,$proNum)'>查看</button> <button class='btn btn-success' OnClick='updateItem(0,$proNum)'>更新</button></td>";
                                             echo "</tr>";
                                             $proNum += 1;
                                         }
@@ -176,6 +180,7 @@
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
+                                        <th>项目id</th>
                                         <th>单体名称</th>
                                         <th>项目名称</th>
                                         <th>主要结构类型</th>
@@ -186,6 +191,7 @@
                                         <th>钢材实算值(裙房)</th>
                                         <th>钢材料实算值(标准层)</th>
                                         <th>输入者id</th>
+                                        <th>输入者姓名</th>
                                         <th style="min-width: 220px">操作</th>
                                     </tr>
                                 </thead>
@@ -195,6 +201,7 @@
                                         $supStrNum = 0;
                                         foreach ($supStrRes as $row) {
                                             echo "<tr class='supStrTable'>";
+                                            echo "<td>".$row['id']."</td>";
                                             echo "<td>".$row['name']."</td>";
                                             echo "<td>".$row['projectName']."</td>";
                                             echo "<td>".$row['mainType']."</td>";
@@ -205,6 +212,7 @@
                                             echo "<td>".$row['steelPodiumReal']."</td>";
                                             echo "<td>".$row['steelStandardReal']."</td>";
                                             echo "<td>".$row['inputerID']."</td>";
+                                            echo "<td>".$row['inputerName']."</td>";
                                             echo "<td><button class='btn btn-info' OnClick='viewInfo(1,$supStrNum)'>查看</button> <button class='btn btn-success' OnClick='updateItem(1,$supStrNum)'>更新</button> <button class='btn btn-warning' OnClick='deleteItem(1,$supStrNum)'>删除</button></td>";
                                             echo "</tr>";
                                             $supStrNum+=1;
@@ -240,6 +248,7 @@
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
+                                        <th>项目id</th>
                                         <th>单体名称</th>
                                         <th>项目名称</th>
                                         <th>层数</th>
@@ -251,6 +260,7 @@
                                         <th>混凝土(综合)</th>
                                         <th>钢材(综合)</th>
                                         <th>输入者id</th>
+                                        <th>输入者姓名</th>
                                         <th style="min-width: 220px">操作</th>
                                     </tr>
                                 </thead>
@@ -260,6 +270,7 @@
                                         $basementNum = 0;
                                         foreach ($basementRes as $row) {
                                             echo "<tr class='basementTable'>";
+                                            echo "<td>".$row['id']."</td>";
                                             echo "<td>".$row['name']."</td>";
                                             echo "<td>".$row['projectName']."</td>";
                                             echo "<td>".$row['floor']."</td>";
@@ -274,7 +285,8 @@
                                             echo "<td>".$row['rebarIntegrated']."</td>";
                                             echo "<td>".$row['concreteIntegrated']."</td>";
                                             echo "<td>".$row['steelIntegrated']."</td>";
-                                            echo "<td>".$row['inputerID']."</td>";
+                                            echo "<td>".$row['authorID']."</td>";
+                                            echo "<td>".$row['authorName']."</td>";
                                             echo "<td><button class='btn btn-info' OnClick='viewInfo(2,$basementNum)'>查看</button> <button class='btn btn-success' OnClick='updateItem(2,$basementNum)'>更新</button> <button class='btn btn-warning' OnClick='deleteItem(2,$basementNum)'>删除</button></td>";
                                             echo "</tr>";
                                             $basementNum+=1;
@@ -363,8 +375,6 @@
                     $('.basementTable').eq(i).css('display', '');
                 }
             }
-            
-            alert(pageNO);
         }
 
         function newItem(type){
@@ -397,7 +407,18 @@
         }
 
         function deleteItem(type,itemNO){
-            if (<?php echo $_SESSION["authority"];?> != 3 || $('.projectTable')[itemNO].childNodes[7].textContent == '<?php echo $_SESSION["id"];?>') {
+            var EntererID;
+            if (type == 0) {
+                EntererID = $('.projectTable')[itemNO].childNodes[8].textContent;
+
+            }
+            else if (type == 1) {
+                EntererID = $('.supStrTable')[itemNO].childNodes[10].textContent;
+            }
+            else if (type == 2) {
+                EntererID = $('.basementTable')[itemNO].childNodes[11].textContent;
+            }
+            if (<?php echo $_SESSION["authority"];?> != 3 || EntererID == '<?php echo $_SESSION["id"];?>') {
                 if(confirm("确认删除？")){
                     document.cookie = "operation=3";
                     if (type == 0) {
@@ -420,7 +441,18 @@
         }
 
         function updateItem(type,itemNO){
-            if (<?php echo $_SESSION["authority"];?> != 3 || $('.projectTable')[itemNO].childNodes[7].textContent == <?php echo $_SESSION["id"];?>) {
+            var EntererID;
+            if (type == 0) {
+                EntererID = $('.projectTable')[itemNO].childNodes[8].textContent;
+
+            }
+            else if (type == 1) {
+                EntererID = $('.supStrTable')[itemNO].childNodes[10].textContent;
+            }
+            else if (type == 2) {
+                EntererID = $('.basementTable')[itemNO].childNodes[11].textContent;
+            }
+            if (<?php echo $_SESSION["authority"];?> != 3 || EntererID == <?php echo $_SESSION["id"];?>) {
                 document.cookie = "operation=2";
                 if (type == 0) {
                     document.cookie = "itemName="+$('.projectTable')[itemNO].childNodes[0].textContent;
@@ -466,7 +498,7 @@
                     tableAll = $('.basementTable');
                 }
                 for (var i = tableAll.length - 1; i >= 0; i--) {
-                    if (tableAll[i].childNodes[0].textContent.search(keyword) != -1) {
+                    if (tableAll[i].childNodes[1].textContent.search(keyword) != -1) {
                         tableAll.eq(i).css('display', '')
                     }else{
                         tableAll.eq(i).css('display', 'none')

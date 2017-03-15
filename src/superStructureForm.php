@@ -133,6 +133,7 @@
                                         <table class="table table-hover">
                                             <thead>
                                                 <tr>
+                                                    <td>项目id</td>
                                                     <td>项目名称</td>
                                                     <td>建筑类型</td>
                                                     <td>项目创建人</td>
@@ -142,9 +143,10 @@
 
                                             <tbody>
                                                 <?php
-                                                    $proRes = $pdo->query("SELECT projectName, buildingType, inputerID, inputerName FROM Project WHERE isExisting = 1");
+                                                    $proRes = $pdo->query("SELECT projectID, projectName, buildingType, inputerID, inputerName FROM Project WHERE isExisting = 1");
                                                     foreach ($proRes as $row) {
                                                         echo "<tr name='proTable' class = 'proTableClass'>";
+                                                        echo "<td>".$row['projectID']."</td>";
                                                         echo "<td>".$row['projectName']."</td>";
                                                         echo "<td>".$row['buildingType']."</td>";
                                                         echo "<td>".$row['inputerName']."</td>";
@@ -356,7 +358,7 @@
             allInput = $(".form-control");
             <?php
                 if(isset($_COOKIE["operation"]) and $_COOKIE["operation"]!=0){
-                    $sqlquery = "SELECT * FROM superStructure WHERE name = '".$_COOKIE['itemName']."'";
+                    $sqlquery = "SELECT * FROM superStructure WHERE id = '".$_COOKIE['itemName']."'";
                     // echo "alert(\"$sqlquery\");";
                     $rs = $pdo->query($sqlquery);
                     $existRecord = $rs->fetch();
@@ -468,7 +470,9 @@
         function selectPro(){
             var selected = $('input:radio[name="project"]:checked');
             if (selected.length != 0) {
-                document.getElementById('selectedPro').innerHTML = selected.parent().parent().children().eq(0).text();
+                projectNowID = selected.parent().parent().children().eq(0).text();
+                document.cookie = "projectID=" + projectNowID;
+                document.getElementById('selectedPro').innerHTML = selected.parent().parent().children().eq(1).text();
             }
         }
         function submitForm(){
@@ -500,7 +504,8 @@
             document.cookie = "steelPodiumTheo="+allInput.eq(24).val();
             document.cookie = "steelStandardReal="+allInput.eq(25).val();
             document.cookie = "steelStandardTheo="+allInput.eq(26).val();
-            projectNameNow = document.getElementById('selectedPro').innerHTML
+
+            projectNameNow = document.getElementById('selectedPro').innerHTML;
             document.cookie = "projectName="+projectNameNow;
             if ($('input:radio[name="loft"]').val() == "true") {
                 document.cookie = "havaLoft=1";

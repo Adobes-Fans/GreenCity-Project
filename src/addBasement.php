@@ -8,17 +8,16 @@ $operation = $_COOKIE[operation];
 
 
 try {
-  echo $operation;
   $conn = new PDO('mysql:host=localhost;dbname=GreenCity', "root", "123456", array(PDO::ATTR_PERSISTENT => true));
   $userip = $_SERVER["REMOTE_ADDR"];
   if ($operation == '0') {
-    $sql = "INSERT INTO basement (name, projectName, floor, airShelter, airShelterArea, basementArea, 
+    $sql = "INSERT INTO basement (name, projectName, projectID, floor, airShelter, airShelterArea, basementArea, 
     basementStructure, designStartDay, designEndDay, waterLevel, coveredDepth, 
     basementDescription, rebarAirShelter, rebarNoAirShelter, rebarTower, rebarNoTower,
     rebarIntegrated, concreteAirShelter, concreteNoAirShelter, concreteTower, 
     concreteNoTower, concreteIntegrated, steelAirShelter, steelNoAirShelter, 
     steelTower, steelNoTower, steelIntegrated, authorIP, isExisting, authorName, authorID) 
-    VALUES ('$_POST[name]', '$_COOKIE[projectName]', '$_POST[floor]', '$_COOKIE[airShelter]',
+    VALUES ('$_POST[name]', '$_COOKIE[projectName]', '$_COOKIE[projectID]', '$_POST[floor]', '$_COOKIE[airShelter]',
     '$_POST[airShelterArea]', '$_POST[basementArea]', 
     '$_POST[basementStructure]', '$_POST[designStartDay]', '$_POST[designEndDay]', 
     '$_POST[waterLevel]', '$_POST[coveredDepth]', '$_POST[basementDescription]', 
@@ -29,7 +28,7 @@ try {
     '$_POST[steelTower]', '$_POST[steelNoTower]', '$_POST[steelIntegrated]', '$userip', '1', '$_SESSION[name]', '$_SESSION[id]')";
   }
   else if ($operation == '2') {
-    $sql = "UPDATE basement SET name = '$_POST[name]', projectName = '$_COOKIE[projectName]', floor = '$_POST[floor]', 
+    $sql = "UPDATE basement SET name = '$_POST[name]', projectName = '$_COOKIE[projectName]', projectID = '$_COOKIE[projectID]', floor = '$_POST[floor]', 
       airShelter = '$_COOKIE[airShelter]', airShelterArea = '$_POST[airShelterArea]', 
       basementArea = '$_POST[basementArea]', basementStructure = '$_POST[basementStructure]', designStartDay = '$_POST[designStartDay]', 
       designEndDay = '$_POST[designEndDay]', waterLevel = '$_POST[waterLevel]', coveredDepth = '$_POST[coveredDepth]', 
@@ -43,8 +42,7 @@ try {
       steelNoTower = '$_POST[steelNoTower]', steelIntegrated = '$_POST[steelIntegrated]', 
       authorIP = '$userip', authorID = '$_SESSION[id]', authorName = '$_SESSION[name]' WHERE id = '$_COOKIE[id]'";
   }
-
-  $conn -> exec($sql);
+  $conn -> exec ($sql);
 }
 catch (PDOException $e) {
   echo $e -> getMessage();

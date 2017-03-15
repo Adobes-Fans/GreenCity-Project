@@ -27,11 +27,11 @@ try {
       seismicPreIntensity = '$_POST[seismicPreIntensity]', developer = '$_POST[developer]', 
       basicWindPressure = '$_POST[basicWindPressure]', 
       basicSnowPressure = '$_POST[basicSnowPressure]',
-      inputerIP = '$userip', inputerID = '$_SESSION[id]', inputerName = '$_SESSION[name]' WHERE projectName = '$_COOKIE[projectName]'";
+      inputerIP = '$userip', inputerID = '$_SESSION[id]', inputerName = '$_SESSION[name]' WHERE projectID = '$_COOKIE[projectID]'";
     $conn -> exec($sql);
-    $sql = "UPDATE basement SET projectName = '$_POST[projectName]' WHERE projectName = '$_COOKIE[projectName]'";
+    $sql = "UPDATE basement SET projectName = '$_POST[projectName]', projectID = '$_COOKIE[projectID]' WHERE projectID = '$_COOKIE[projectID]'";
     $conn -> exec($sql);
-    $sql = "UPDATE superStructure SET projectName = '$_POST[projectName]' WHERE projectName = '$_COOKIE[projectName]'";
+    $sql = "UPDATE superStructure SET projectName = '$_POST[projectName]', projectID = '$_COOKIE[projectID]' WHERE projectID = '$_COOKIE[projectID]'";
     $conn -> exec($sql);
   }
 }
